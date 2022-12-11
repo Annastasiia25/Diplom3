@@ -1,11 +1,14 @@
 import UI.RegistrationPage;
 import com.codeborne.selenide.Configuration;
 import com.github.javafaker.Faker;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import org.example.Main;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverConditions.url;
@@ -23,10 +26,12 @@ public class UserRegistrationTest {
     String name = faker.name().firstName();
     String shortPassword = faker.internet().password(1, 5);
 
+    private WebDriver driver;
 
     @Before
     public void before() {
-        Configuration.startMaximized = true;
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
         main = open(Main.URL, Main.class);
     }
 
@@ -72,7 +77,7 @@ public class UserRegistrationTest {
     }
 
     @After
-    public void tearDown (){
-        webdriver().driver().close();
+    public void cleanUp(){
+        driver.quit();
     }
 }
